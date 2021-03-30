@@ -1,8 +1,10 @@
 const express = require('express'); //forma que se tiene para traer modulos
 const bodyParser = require('body-parser');
-const router = express.Router(); //definimos el router
 
 const response = require('./network/response');
+
+// const router = require('./components/message/network');
+const router = require('./network/routes');
 
 var app = express(); //inicializar express
 
@@ -10,38 +12,16 @@ var app = express(); //inicializar express
 app.use(express.json());
 app.use(express.urlencoded({extended : false}))
 
-//configurando bodyParser siempre va antes del router
-// app.use(bodyParser.json());
-// app.use(bodyParser.urlencoded({extended: false}));
-app.use(router); //que utilize router
+//le paso a routes la app
+router(app);
 
 
 
-
-router.get('/message', function (req, res) {
-    console.log(req.headers);
-    res.header({
-        "Custom-header": "Nuestro valor personalizado"
-    })
-    response.success(req, res, 'Lista de mensajes');
-});
-
-router.post('/message', function(req,res){
-    console.log(req.query)
-   if(req.query.error == "ok"){
-    response.error(req, res, 'error inesperado', 500, 'Es solo una simulacion de los errores');
-   }else{
-    response.success(req, res, 'Creado perfectamente', 201); 
-   }
-   
-});
 
 //servidor estatico de express
 app.use('/app', express.static('public'));
 
-// app.use('/', function(req,res){
-//     res.send("Hola mundo")
-// });
+
 
 app.listen(3000); //donde se va a escuchar, elegimos puerto.
 console.log('la app esta escuchando en http://localhost:3000');
