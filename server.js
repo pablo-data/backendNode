@@ -2,6 +2,8 @@ const express = require('express'); //forma que se tiene para traer modulos
 const bodyParser = require('body-parser');
 const router = express.Router(); //definimos el router
 
+const response = require('./network/response');
+
 var app = express(); //inicializar express
 
 // configurando bodyParser nueva version sin body-parser solo con express
@@ -21,13 +23,17 @@ router.get('/message', function (req, res) {
     res.header({
         "Custom-header": "Nuestro valor personalizado"
     })
-    res.send('Lista de mensajes');
+    response.success(req, res, 'Lista de mensajes');
 });
 
 router.post('/message', function(req,res){
     console.log(req.query)
-    console.log(req.body)
-    res.status(201).send([{error: '', body: 'Creado correctamente'}]);
+   if(req.query.error == "ok"){
+    response.error(req, res, 'error simulado', 400);
+   }else{
+    response.success(req, res, 'Creado perfectamente', 201); 
+   }
+   
 });
 
 // app.use('/', function(req,res){
