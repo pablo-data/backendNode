@@ -36,6 +36,9 @@ router.post('/message', function(req,res){
    
 });
 
+//servidor estatico de express
+app.use('/app', express.static('public'));
+
 // app.use('/', function(req,res){
 //     res.send("Hola mundo")
 // });
