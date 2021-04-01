@@ -1,10 +1,14 @@
 const express = require('express'); //forma que se tiene para traer modulos
 const bodyParser = require('body-parser');
 
+const db = require('./db');
+
 const response = require('./network/response');
 
 // const router = require('./components/message/network');
 const router = require('./network/routes');
+
+db('agregar');
 
 var app = express(); //inicializar express
 

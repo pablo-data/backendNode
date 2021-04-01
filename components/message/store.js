@@ -1,14 +1,4 @@
-const db = require('mongoose');
 const Model = require('./model');
-
-const uri = 'ingresar';
-
-db.Promise = global.Promise;
-
-db.connect(uri, {useNewUrlParser:true,
-useUnifiedTopology: true })
-.then(() => console.log('[db] Conectada con éxito'))
-.catch(err => console.error('[db]', err));
 
 function addMessage(message) {
     const myMessage = new Model(message);
@@ -16,12 +6,24 @@ function addMessage(message) {
 }
 
 async function getMessages(filterUser) {
-    let filter = {};
-    if(filterUser !== null){
+    return new Promise((resolve, reject) => {
+        let filter = {};
+         if(filterUser !== null){
         filter = { user: filterUser}
-    }
-   const messages = await Model.find(filter);
-   return messages;
+        }
+        Model.find(filter)
+        //para buscar lo que tenga id y lo popula
+        .populate('user')
+        .exec((error, populated) => {
+            if(error) {
+                reject(error);
+                return false;
+            }
+
+            resolve(populated);
+        })
+    })
+    
 }
 
 async function updateText(id, message){
